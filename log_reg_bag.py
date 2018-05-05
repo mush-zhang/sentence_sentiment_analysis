@@ -53,7 +53,7 @@ def main():
     aggregate = [{0: 0, 1: 0, 2: 0, 3: 0, 4: 0}]*test_data.num_rows()
     print aggregate[0]
 
-    for idx in range(1):
+    for idx in range(100):
         
         data = pd.read_csv('clean_train2.csv', sep=',', header=0, engine='python')
         sample_data = data.sample(frac=1, replace=True)
