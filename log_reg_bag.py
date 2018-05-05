@@ -34,13 +34,18 @@ def procedure(train_data, test_data):
 def record(agg, single):
 
     for idx in range(len(single)):
-        agg[idx][int(single[idx])] += 1
+
+        if agg[idx].has_key(int(single[idx])):
+            agg[idx][int(single[idx])] += 1
+        else:
+            agg[idx][int(single[idx])] = 0
     
     return agg
 
 def aggregate_results(agg):
     final = [6] * len(agg)
     for idx in range(len(agg)):
+
         final[idx] = max(agg[idx].iteritems(), key=operator.itemgetter(1))[0]
     return final
 
@@ -50,8 +55,11 @@ def main():
     test_data = graphlab.SFrame('clean_test2.csv')
 
     # record results: list of dicts
-    aggregate = [{0: 0, 1: 0, 2: 0, 3: 0, 4: 0}]*test_data.num_rows()
-    print aggregate[0]
+    aggregate = []
+    for i in range(test_data.num_rows()):
+        aggregate.append({})
+
+
 
     for idx in range(100):
         
@@ -61,10 +69,11 @@ def main():
         train_data = graphlab.SFrame('./temp_train/train.csv')
         result_t = procedure(train_data, test_data)
         record(aggregate, result_t)
+
     
     final_results = aggregate_results(aggregate)
     
-
+ 
     ids = list(range(1455))
     with open('bagg_pred.csv', 'wb') as f:
         writer = csv.writer(f)
